@@ -79,16 +79,12 @@ export default function BookList() {
         break;
       case "addedRev":
         result.sort(
-          (a, b) =>
-            new Date(b.startedDate).getTime() -
-            new Date(a.startedDate).getTime()
+          (a, b) => new Date(b.added).getTime() - new Date(a.added).getTime()
         );
         break;
       case "added":
         result.sort(
-          (a, b) =>
-            new Date(a.startedDate).getTime() -
-            new Date(b.startedDate).getTime()
+          (a, b) => new Date(a.added).getTime() - new Date(b.added).getTime()
         );
         break;
     }
@@ -139,7 +135,10 @@ export default function BookList() {
         <Dropdown
           label="Sort By"
           value={sort}
-          onSelect={setSort}
+          onSelect={(val) => {
+            console.log("Selected sort option:", val); // Debugging log
+            setSort(val);
+          }}
           options={SORT_OPTIONS}
           placeholder="Sort By"
           menuContentStyle={{
@@ -148,6 +147,7 @@ export default function BookList() {
           }}
           CustomDropdownItem={({ option }) => (
             <Text
+              onPress={() => setSort(option.value)}
               style={{
                 color: theme.colors.onBackground,
                 padding: 10,
@@ -157,6 +157,7 @@ export default function BookList() {
             </Text>
           )}
         />
+
         <Button
           mode="outlined"
           onPress={handleReset}
