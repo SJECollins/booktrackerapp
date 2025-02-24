@@ -121,16 +121,26 @@ export default function Index() {
   const bestMonth = () => {
     const monthCounts = books.reduce((counts, book) => {
       if (book.status === "finished" && book.finishedDate) {
-        const month = new Date(book.finishedDate).getMonth();
-        const year = new Date(book.finishedDate).getFullYear();
-        counts[`${month}/${year}`] = (counts[`${month}/${year}`] || 0) + 1;
+        const date = new Date(book.finishedDate);
+        const monthYear = `${date.getMonth() + 1}/${date.getFullYear()}`; // Convert to human-readable format
+        counts[monthYear] = (counts[monthYear] || 0) + 1;
       }
       return counts;
     }, {} as Record<string, number>);
+
     const result = Object.entries(monthCounts).sort(
       (a, b) => b[1] - a[1]
     )[0]?.[0];
-    return result ? result.split("/")[0] : "None";
+
+    if (!result) return "None";
+
+    const [month, year] = result.split("/");
+    const monthName = new Date(
+      parseInt(year),
+      parseInt(month) - 1
+    ).toLocaleString("en-US", { month: "long" });
+
+    return `${monthName} ${year}`;
   };
 
   const bestYear = () => {
@@ -141,10 +151,12 @@ export default function Index() {
       }
       return counts;
     }, {} as Record<number, number>);
+
     const result = Object.entries(yearCounts).sort(
       (a, b) => b[1] - a[1]
     )[0]?.[0];
-    return result ? result.toString : "None";
+
+    return result ? result.toString() : "None";
   };
 
   return (
