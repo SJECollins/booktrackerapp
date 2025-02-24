@@ -97,7 +97,7 @@ export default function GenreDetails() {
           <HeadText text="Unread:" />
           {books
             .filter((book) => {
-              return book.status !== "finished";
+              return book.status == "to-read";
             })
             .map((book) => (
               <LinkText key={book.id} to={`/books/${book.id}`}>

@@ -12,6 +12,7 @@ import PageView from "@/components/pageView";
 import LinkText from "@/components/linkText";
 import { StarRatingDisplay } from "react-native-star-rating-widget";
 import BigHeadText from "@/components/bigHeadText";
+import { ScrollView } from "react-native-gesture-handler";
 
 // Display individual book details
 export default function BookDetail() {
@@ -67,8 +68,6 @@ export default function BookDetail() {
     return <RegText text="Book not found" />;
   }
 
-  console.log(book?.rating);
-
   return (
     <PageView>
       <BigHeadText text={book.title} />
@@ -85,52 +84,66 @@ export default function BookDetail() {
         <LinkButton href={`/books/delete/${book.id}`} title="Delete" />
       </View>
       <HeadText text="Details: " />
-      <View
+      <ScrollView
         style={{
-          flexDirection: "row",
+          width: "100%",
+        }}
+        contentContainerStyle={{
           alignItems: "center",
-          width: "80%",
-          marginBottom: 10,
-          marginTop: 10,
         }}
       >
-        <RegText text="Author: " />
-        <LinkText to={`/authors/${book.author_id}`}>
-          {book.authorName ?? "Unknown Author"}
-        </LinkText>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          width: "80%",
-          marginBottom: 10,
-          marginTop: 10,
-        }}
-      >
-        <RegText text="Genre(s): " />
-        {genres.map((genre) => (
-          <LinkText key={genre.id} to={`/genres/${genre.id}`}>
-            {`${genre.name}, `}
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignItems: "center",
+            width: "90%",
+            marginBottom: 10,
+            marginTop: 10,
+          }}
+        >
+          <RegText text="Author: " />
+          <LinkText to={`/authors/${book.author_id}`}>
+            {book.authorName ?? "Unknown Author"}
           </LinkText>
-        ))}
-      </View>
-      <View
-        style={{
-          width: "80%",
-        }}
-      >
-        <RegText text={`Link: ${book.link}`} />
-        <RegText text={`Notes: ${book.notes}`} />
-        <RegText text={`Status: ${book.status}`} />
-        {book.status === "finished" || book.status === "abandoned" ? (
-          <>
-            <RegText text={`Finished On: ${finishedOn()}`} />
-            <StarRatingDisplay rating={book.rating / 2} />
-            <LinkButton href={`/books/rate/${book.id}`} title="Update Rating" />
-          </>
-        ) : null}
-      </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignItems: "center",
+            width: "90%",
+            marginBottom: 10,
+            marginTop: 10,
+          }}
+        >
+          <RegText text="Genre(s): " />
+          {genres.map((genre) => (
+            <LinkText key={genre.id} to={`/genres/${genre.id}`}>
+              {`${genre.name}, `}
+            </LinkText>
+          ))}
+        </View>
+        <View
+          style={{
+            width: "90%",
+          }}
+        >
+          <RegText text={`Link: ${book.link}`} />
+          <RegText text={`Notes: ${book.notes}`} />
+          <RegText text={`Status: ${book.status}`} />
+          {book.status === "finished" || book.status === "abandoned" ? (
+            <>
+              <RegText text={`Finished On: ${finishedOn()}`} />
+              <StarRatingDisplay rating={book.rating / 2} />
+              <LinkButton
+                href={`/books/rate/${book.id}`}
+                title="Update Rating"
+              />
+            </>
+          ) : null}
+        </View>
+      </ScrollView>
     </PageView>
   );
 }

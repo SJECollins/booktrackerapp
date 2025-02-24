@@ -59,8 +59,6 @@ export default function AuthorDetails() {
     return <RegText text="Book not found" />;
   }
 
-  console.log(books);
-
   return (
     <PageView>
       <HeadText text={author.name} />
@@ -101,7 +99,7 @@ export default function AuthorDetails() {
           <HeadText text="Unread:" />
           {books
             .filter((book) => {
-              return book.status !== "finished";
+              return book.status === "to-read";
             })
             .map((book) => (
               <LinkText key={book.id} to={`/books/${book.id}`}>

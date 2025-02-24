@@ -118,6 +118,35 @@ export default function Index() {
     ).length;
   };
 
+  const bestMonth = () => {
+    const monthCounts = books.reduce((counts, book) => {
+      if (book.status === "finished" && book.finishedDate) {
+        const month = new Date(book.finishedDate).getMonth();
+        const year = new Date(book.finishedDate).getFullYear();
+        counts[`${month}/${year}`] = (counts[`${month}/${year}`] || 0) + 1;
+      }
+      return counts;
+    }, {} as Record<string, number>);
+    const result = Object.entries(monthCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0]?.[0];
+    return result ? result.split("/")[0] : "None";
+  };
+
+  const bestYear = () => {
+    const yearCounts = books.reduce((counts, book) => {
+      if (book.status === "finished" && book.finishedDate) {
+        const year = new Date(book.finishedDate).getFullYear();
+        counts[year] = (counts[year] || 0) + 1;
+      }
+      return counts;
+    }, {} as Record<number, number>);
+    const result = Object.entries(yearCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0]?.[0];
+    return result ? result.toString : "None";
+  };
+
   return (
     <PageView>
       <BigHeadText text="Book Tracker" />
@@ -148,7 +177,13 @@ export default function Index() {
           <HeadText text="Latest Stuff:" />
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
           <RegText text="Currently Reading:" />
           {books.filter((book) => book.status === "reading").length > 0 ? (
             books
@@ -163,7 +198,13 @@ export default function Index() {
           )}
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
           <RegText text="Latest Finished:" />
           {getLastFinished() ? (
             <LinkText to={`/books/${getLastFinished()?.id}`}>
@@ -174,7 +215,13 @@ export default function Index() {
           )}
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
           <RegText text="Latest Added:" />
           {getLastAdded() ? (
             <LinkText to={`/books/${getLastAdded()?.id}`}>
@@ -204,6 +251,8 @@ export default function Index() {
           <RegText text={`Read Last Month: ${numberReadLastMonth()}`} />
           <RegText text={`Read This Year: ${numberReadThisYear()}`} />
           <RegText text={`Read Last Year: ${numberReadLastYear()}`} />
+          <RegText text={`Best Month: ${bestMonth()}`} />
+          <RegText text={`Best Year: ${bestYear()}`} />
           <RegText
             text={`Total Books Abandoned: ${
               books.filter((book) => book.status === "abandoned").length

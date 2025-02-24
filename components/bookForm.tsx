@@ -29,6 +29,7 @@ import HeadText from "./headText";
 import PageView from "./pageView";
 import MultiGenreSelector from "./genreSelect";
 import StarRating from "react-native-star-rating-widget";
+import { ScrollView } from "react-native-gesture-handler";
 
 // Constants
 const STATUS_OPTIONS: {
@@ -242,245 +243,259 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
   return (
     <PageView>
       <HeadText text={bookId ? "Edit Book" : "Add Book"} />
-
-      <TextInput
-        label="Title"
-        value={book.title}
-        onChangeText={(text) => setBook({ ...book, title: text })}
-        style={{ width: "100%", marginTop: 10 }}
-      />
-
-      <View style={{ width: "100%", zIndex: 1 }}>
-        <TextInput
-          label="Author"
-          value={book.authorName}
-          onChangeText={handleAuthorChange}
-          style={{ marginTop: 10 }}
-          right={
-            showDropdown && (
-              <TextInput.Icon
-                icon="close"
-                onPress={() => {
-                  setShowDropdown(false);
-                  setFilteredAuthors([]);
-                }}
-              />
-            )
-          }
-        />
-
-        {showDropdown && filteredAuthors.length > 0 && (
-          <FlatList
-            data={filteredAuthors}
-            keyExtractor={(item) => item.id.toString()}
-            style={{
-              maxHeight: 150,
-              backgroundColor: theme.colors.background,
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: theme.colors.outline,
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              zIndex: 2,
-              elevation: 3,
-            }}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => handleAuthorSelect(item)}
-                style={{
-                  padding: 10,
-                  borderBottomWidth: 1,
-                  borderBottomColor: theme.colors.outline,
-                }}
-              >
-                <Text style={{ color: theme.colors.onBackground }}>
-                  {item.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-      </View>
-
-      <MultiGenreSelector
-        selectedGenres={book.genres || []}
-        onGenresChange={(selectedGenres) => {
-          setBook({ ...book, genres: selectedGenres });
+      <ScrollView
+        style={{
+          width: "100%",
+          flex: 1,
         }}
-        availableGenres={genres}
-      />
-
-      <TouchableOpacity
-        style={{ width: "100%" }}
-        onPress={() => setShowStatusModal(true)}
       >
         <TextInput
-          label="Status"
-          value={
-            STATUS_OPTIONS.find((option) => option.value === book.status)?.label
-          }
-          editable={false}
-          style={{ marginTop: 10 }}
+          label="Title"
+          value={book.title}
+          onChangeText={(text) => setBook({ ...book, title: text })}
+          style={{ width: "100%", marginTop: 10 }}
         />
-      </TouchableOpacity>
 
-      <Portal>
-        <Modal
-          visible={showStatusModal}
-          onDismiss={() => setShowStatusModal(false)}
-          contentContainerStyle={{
-            position: "absolute",
-            left: "10%",
-            right: "10%",
-            backgroundColor: theme.colors.background,
-            padding: 20,
-            borderRadius: 8,
-            elevation: 5,
-            top: "30%",
-          }}
-        >
-          <View>
-            <Text
+        <View style={{ width: "100%", zIndex: 1 }}>
+          <TextInput
+            label="Author"
+            value={book.authorName}
+            onChangeText={handleAuthorChange}
+            style={{ marginTop: 10 }}
+            right={
+              showDropdown && (
+                <TextInput.Icon
+                  icon="close"
+                  onPress={() => {
+                    setShowDropdown(false);
+                    setFilteredAuthors([]);
+                  }}
+                />
+              )
+            }
+          />
+
+          {showDropdown && filteredAuthors.length > 0 && (
+            <FlatList
+              data={filteredAuthors}
+              keyExtractor={(item) => item.id.toString()}
               style={{
-                fontSize: 18,
-                marginBottom: 15,
-                textAlign: "center",
-                color: theme.colors.onBackground,
+                maxHeight: 150,
+                backgroundColor: theme.colors.background,
+                borderRadius: 5,
+                borderWidth: 1,
+                borderColor: theme.colors.outline,
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                zIndex: 2,
+                elevation: 3,
               }}
-            >
-              Select Status
-            </Text>
-            {STATUS_OPTIONS.map((option) => (
-              <TouchableOpacity
-                key={option.value}
-                onPress={() => handleStatusSelect(option.value)}
-                style={{
-                  padding: 15,
-                  borderBottomWidth: 1,
-                  borderBottomColor: theme.colors.outline,
-                }}
-              >
-                <Text
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => handleAuthorSelect(item)}
                   style={{
-                    color:
-                      book.status === option.value
-                        ? theme.colors.primary
-                        : theme.colors.onBackground,
-                    fontSize: 16,
+                    padding: 10,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.colors.outline,
                   }}
                 >
-                  {option.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </Modal>
-      </Portal>
-
-      <TextInput
-        label="Link"
-        value={book.link}
-        onChangeText={(text) => setBook({ ...book, link: text })}
-        style={{ width: "100%", marginTop: 10 }}
-      />
-
-      <TextInput
-        label="Notes"
-        value={book.notes}
-        onChangeText={(text) => setBook({ ...book, notes: text })}
-        style={{ width: "100%", marginTop: 10 }}
-      />
-
-      {book.status != "to-read" && (
-        <>
-          <TextInput
-            label="Started Date"
-            value={new Date(book.startedDate).toDateString()}
-            right={
-              <TextInput.Icon
-                icon="calendar"
-                onPress={() => setOpenStartDate(true)}
-              />
-            }
-            editable={false}
-            style={{ width: "100%", marginTop: 10 }}
-          />
-          {openStartDate && (
-            <DateTimePicker
-              mode="date"
-              display="default"
-              value={new Date(book.startedDate)}
-              onChange={(event, selectedDate) => {
-                setOpenStartDate(false);
-                if (selectedDate) {
-                  setBook({ ...book, startedDate: selectedDate.toISOString() });
-                }
-              }}
+                  <Text style={{ color: theme.colors.onBackground }}>
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
             />
           )}
-        </>
-      )}
-      {book.status === "finished" && (
-        <>
-          <TextInput
-            label="Finished Date"
-            value={
-              book.finishedDate
-                ? new Date(book.finishedDate).toDateString()
-                : ""
-            }
-            right={
-              <TextInput.Icon
-                icon="calendar"
-                onPress={() => setOpenFinishDate(true)}
-              />
-            }
-            editable={false}
-            style={{ width: "100%", marginTop: 10 }}
-          />
-          {openFinishDate && (
-            <DateTimePicker
-              mode="date"
-              display="default"
-              value={new Date(book.finishedDate)}
-              onChange={(event, selectedDate) => {
-                setOpenFinishDate(false);
-                if (selectedDate) {
-                  setBook({
-                    ...book,
-                    finishedDate: selectedDate.toISOString(),
-                  });
-                }
-              }}
-            />
-          )}
-        </>
-      )}
+        </View>
 
-      {(book.status === "finished" || book.status === "abandoned") && (
-        <StarRating rating={rating} onChange={handleSetRating} />
-      )}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: 10,
-          width: "100%",
-        }}
-      >
-        <Button mode="contained" onPress={handleSave} style={{ marginTop: 10 }}>
-          {bookId ? "Update Book" : "Add Book"}
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => router.navigate("/books")}
-          style={{ marginTop: 10 }}
+        <MultiGenreSelector
+          selectedGenres={book.genres || []}
+          onGenresChange={(selectedGenres) => {
+            setBook({ ...book, genres: selectedGenres });
+          }}
+          availableGenres={genres}
+        />
+
+        <TouchableOpacity
+          style={{ width: "100%" }}
+          onPress={() => setShowStatusModal(true)}
         >
-          Cancel
-        </Button>
-      </View>
+          <TextInput
+            label="Status"
+            value={
+              STATUS_OPTIONS.find((option) => option.value === book.status)
+                ?.label
+            }
+            editable={false}
+            style={{ marginTop: 10 }}
+          />
+        </TouchableOpacity>
+
+        <Portal>
+          <Modal
+            visible={showStatusModal}
+            onDismiss={() => setShowStatusModal(false)}
+            contentContainerStyle={{
+              position: "absolute",
+              left: "10%",
+              right: "10%",
+              backgroundColor: theme.colors.background,
+              padding: 20,
+              borderRadius: 8,
+              elevation: 5,
+              top: "30%",
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  fontSize: 18,
+                  marginBottom: 15,
+                  textAlign: "center",
+                  color: theme.colors.onBackground,
+                }}
+              >
+                Select Status
+              </Text>
+              {STATUS_OPTIONS.map((option) => (
+                <TouchableOpacity
+                  key={option.value}
+                  onPress={() => handleStatusSelect(option.value)}
+                  style={{
+                    padding: 15,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.colors.outline,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color:
+                        book.status === option.value
+                          ? theme.colors.primary
+                          : theme.colors.onBackground,
+                      fontSize: 16,
+                    }}
+                  >
+                    {option.label}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Modal>
+        </Portal>
+
+        <TextInput
+          label="Link"
+          value={book.link}
+          onChangeText={(text) => setBook({ ...book, link: text })}
+          style={{ width: "100%", marginTop: 10 }}
+        />
+
+        <TextInput
+          label="Notes"
+          value={book.notes}
+          onChangeText={(text) => setBook({ ...book, notes: text })}
+          style={{ width: "100%", marginTop: 10 }}
+        />
+
+        {book.status != "to-read" && (
+          <>
+            <TextInput
+              label="Started Date"
+              value={new Date(book.startedDate).toDateString()}
+              right={
+                <TextInput.Icon
+                  icon="calendar"
+                  onPress={() => setOpenStartDate(true)}
+                />
+              }
+              editable={false}
+              style={{ width: "100%", marginTop: 10 }}
+            />
+            {openStartDate && (
+              <DateTimePicker
+                mode="date"
+                display="default"
+                value={new Date(book.startedDate)}
+                onChange={(event, selectedDate) => {
+                  setOpenStartDate(false);
+                  if (selectedDate) {
+                    setBook({
+                      ...book,
+                      startedDate: selectedDate.toISOString(),
+                    });
+                  }
+                }}
+              />
+            )}
+          </>
+        )}
+        {book.status === "finished" && (
+          <>
+            <TextInput
+              label="Finished Date"
+              value={
+                book.finishedDate
+                  ? new Date(book.finishedDate).toDateString()
+                  : ""
+              }
+              right={
+                <TextInput.Icon
+                  icon="calendar"
+                  onPress={() => setOpenFinishDate(true)}
+                />
+              }
+              editable={false}
+              style={{ width: "100%", marginTop: 10 }}
+            />
+            {openFinishDate && (
+              <DateTimePicker
+                mode="date"
+                display="default"
+                value={new Date(book.finishedDate)}
+                onChange={(event, selectedDate) => {
+                  setOpenFinishDate(false);
+                  if (selectedDate) {
+                    setBook({
+                      ...book,
+                      finishedDate: selectedDate.toISOString(),
+                    });
+                  }
+                }}
+              />
+            )}
+          </>
+        )}
+
+        {(book.status === "finished" || book.status === "abandoned") && (
+          <StarRating rating={rating} onChange={handleSetRating} />
+        )}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 10,
+            width: "100%",
+          }}
+        >
+          <Button
+            mode="contained"
+            onPress={handleSave}
+            style={{ marginTop: 10 }}
+          >
+            {bookId ? "Update Book" : "Add Book"}
+          </Button>
+          <Button
+            mode="outlined"
+            onPress={() => router.navigate("/books")}
+            style={{ marginTop: 10 }}
+          >
+            Cancel
+          </Button>
+        </View>
+      </ScrollView>
     </PageView>
   );
 }

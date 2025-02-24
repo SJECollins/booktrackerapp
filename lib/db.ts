@@ -319,7 +319,6 @@ export const getGenresByBookId = (id: number): Genre[] => {
 
 // Function to add genre to book
 export const addGenreToBook = (bookId: number, genreId: number) => {
-  console.log(bookId, genreId);
   db.runSync(`INSERT INTO book_genres (book_id, genre_id) VALUES (?, ?);`, [
     bookId,
     genreId,

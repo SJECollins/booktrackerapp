@@ -69,6 +69,7 @@ export default function Authors() {
           alignItems: "center",
           width: "100%",
           justifyContent: "space-between",
+          marginBottom: 20,
         }}
       >
         <Dropdown

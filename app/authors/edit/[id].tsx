@@ -33,13 +33,14 @@ export default function EditAuthor() {
         label="Name"
         value={author}
         onChangeText={(text) => setAuthor(text)}
-        style={{ marginTop: 10 }}
+        style={{ marginTop: 10, width: "100%" }}
       />
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
           marginTop: 10,
+          width: "100%",
         }}
       >
         <Button

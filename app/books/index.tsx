@@ -10,6 +10,7 @@ import { Dropdown } from "react-native-paper-dropdown";
 import PageView from "@/components/pageView";
 import { useMessage } from "../_layout";
 import { router, useFocusEffect } from "expo-router";
+import { ScrollView } from "react-native-gesture-handler";
 
 // Define sort options for react-native-paper-dropdown
 const SORT_OPTIONS = [
@@ -165,7 +166,7 @@ export default function BookList() {
           Reset
         </Button>
       </View>
-      <View
+      <ScrollView
         style={{
           width: "100%",
           padding: 20,
@@ -181,6 +182,7 @@ export default function BookList() {
               style={{
                 marginTop: 10,
                 flexDirection: "row",
+                flexWrap: "wrap",
                 alignItems: "center",
                 justifyContent: "space-between",
               }}
@@ -190,7 +192,7 @@ export default function BookList() {
             </View>
           ))
         )}
-      </View>
+      </ScrollView>
     </PageView>
   );
 }
