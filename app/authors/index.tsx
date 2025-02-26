@@ -105,7 +105,13 @@ export default function Authors() {
         </Button>
       </View>
       {authors.length === 0 && <RegText text="No authors found" />}
-      <ScrollView>
+      <ScrollView
+        style={{
+          width: "100%",
+          padding: 20,
+          flex: 1,
+        }}
+      >
         {authors.map((author) => (
           <LinkText key={author.id} to={`/authors/${author.id}`}>
             {author.name}

@@ -106,7 +106,13 @@ export default function Genres() {
       </View>
 
       {genres.length === 0 && <RegText text="No genres found" />}
-      <ScrollView>
+      <ScrollView
+        style={{
+          width: "100%",
+          padding: 20,
+          flex: 1,
+        }}
+      >
         {genres.map((genre) => (
           <LinkText key={genre.id} to={`/genres/${genre.id}`}>
             {genre.name}

@@ -222,6 +222,7 @@ export default function BookList() {
         style={{
           width: "100%",
           padding: 20,
+          marginBottom: 20,
           flex: 1,
         }}
       >

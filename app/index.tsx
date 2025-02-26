@@ -44,9 +44,12 @@ export default function Index() {
 
   const getLastAdded = () => {
     return (
-      books.sort(
-        (a, b) => (Number(b.added) || 0) - (Number(a.added) || 0)
-      )[0] || null
+      books.sort((a, b) => {
+        const dateA = new Date(a.added);
+        const dateB = new Date(b.added);
+
+        return dateB.getTime() - dateA.getTime();
+      })[0] || null
     );
   };
 
@@ -87,7 +90,8 @@ export default function Index() {
     return books.filter(
       (book) =>
         book.status === "finished" &&
-        new Date(book.finishedDate || 0).getMonth() === now.getMonth()
+        new Date(book.finishedDate || 0).getMonth() === now.getMonth() &&
+        new Date(book.finishedDate || 0).getFullYear() === now.getFullYear()
     ).length;
   };
 
@@ -96,7 +100,8 @@ export default function Index() {
     return books.filter(
       (book) =>
         book.status === "finished" &&
-        new Date(book.finishedDate || 0).getMonth() === now.getMonth() - 1
+        new Date(book.finishedDate || 0).getMonth() === now.getMonth() - 1 &&
+        new Date(book.finishedDate || 0).getFullYear() === now.getFullYear()
     ).length;
   };
 
