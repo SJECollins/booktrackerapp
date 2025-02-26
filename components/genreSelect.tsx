@@ -79,7 +79,39 @@ export default function MultiGenreSelector({
       />
 
       {showDropdown && filteredGenres.length > 0 && (
-        <FlatList
+        <View
+          style={{
+            maxHeight: 150,
+            backgroundColor: theme.colors.background,
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: theme.colors.outline,
+            position: "absolute",
+            top: "100%",
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            elevation: 3,
+          }}
+        >
+          {filteredGenres.map((genre) => (
+            <TouchableOpacity
+              key={genre.id}
+              onPress={() => handleGenreSelect(genre)}
+              style={{
+                padding: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: theme.colors.outline,
+              }}
+            >
+              <Text style={{ color: theme.colors.onBackground }}>
+                {genre.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      {/* <FlatList
           data={filteredGenres}
           keyExtractor={(item) => item.id.toString()}
           style={{
@@ -109,8 +141,7 @@ export default function MultiGenreSelector({
               </Text>
             </TouchableOpacity>
           )}
-        />
-      )}
+        /> */}
 
       <View
         style={{

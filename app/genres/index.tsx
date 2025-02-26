@@ -9,6 +9,7 @@ import { useFocusEffect } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
 import { useTheme, Text, Button } from "react-native-paper";
 import { View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SORT_OPTIONS = [
   { label: "Name (A-Z)", value: "name" },
@@ -88,6 +89,7 @@ export default function Genres() {
                 color: theme.colors.onBackground,
                 padding: 10,
               }}
+              onPress={() => setSort(option.value)}
             >
               {option.label}
             </Text>
@@ -104,11 +106,13 @@ export default function Genres() {
       </View>
 
       {genres.length === 0 && <RegText text="No genres found" />}
-      {genres.map((genre) => (
-        <LinkText key={genre.id} to={`/genres/${genre.id}`}>
-          {genre.name}
-        </LinkText>
-      ))}
+      <ScrollView>
+        {genres.map((genre) => (
+          <LinkText key={genre.id} to={`/genres/${genre.id}`}>
+            {genre.name}
+          </LinkText>
+        ))}
+      </ScrollView>
     </PageView>
   );
 }

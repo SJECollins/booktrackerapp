@@ -9,6 +9,7 @@ import { useFocusEffect } from "expo-router";
 import { Dropdown } from "react-native-paper-dropdown";
 import { View } from "react-native";
 import { Text, Button, useTheme } from "react-native-paper";
+import { ScrollView } from "react-native-gesture-handler";
 
 const SORT_OPTIONS = [
   { label: "Name (A-Z)", value: "name" },
@@ -88,6 +89,7 @@ export default function Authors() {
                 color: theme.colors.onBackground,
                 padding: 10,
               }}
+              onPress={() => setSort(option.value)}
             >
               {option.label}
             </Text>
@@ -103,11 +105,13 @@ export default function Authors() {
         </Button>
       </View>
       {authors.length === 0 && <RegText text="No authors found" />}
-      {authors.map((author) => (
-        <LinkText key={author.id} to={`/authors/${author.id}`}>
-          {author.name}
-        </LinkText>
-      ))}
+      <ScrollView>
+        {authors.map((author) => (
+          <LinkText key={author.id} to={`/authors/${author.id}`}>
+            {author.name}
+          </LinkText>
+        ))}
+      </ScrollView>
     </PageView>
   );
 }

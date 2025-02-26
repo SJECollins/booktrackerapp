@@ -1,9 +1,4 @@
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, View } from "react-native";
 import {
   Button,
   Modal,
@@ -89,12 +84,15 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
         if (bookData) {
           const author = getAuthors().find((a) => a.id === bookData.author_id);
           setBook({ ...bookData, authorName: author?.name ?? "" });
+          // Set rating value for the UI component
+          setRating(bookData.rating / 2);
         }
       } catch (err) {
         triggerMessage("Error loading book", "error");
       }
     } else {
       setBook(initialBookState);
+      setRating(0);
     }
     const authorList = getAuthors();
     setAuthors(authorList);
@@ -105,7 +103,7 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
   useFocusEffect(
     useCallback(() => {
       loadData();
-    }, [])
+    }, [bookId])
   );
 
   const handleStatusSelect = (
@@ -150,6 +148,7 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
     const existingAuthor = authors.find(
       (author) => author.name.toLowerCase() === book.authorName.toLowerCase()
     );
+
     if (existingAuthor) {
       authorId = existingAuthor.id;
     } else {
@@ -252,7 +251,10 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
         behavior="height"
         style={{ flex: 1, width: "100%" }}
       >
-        <ScrollView style={{ width: "100%" }}>
+        <ScrollView
+          style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           <TextInput
             label="Title"
             value={book.title}
@@ -280,9 +282,7 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
             />
 
             {showDropdown && filteredAuthors.length > 0 && (
-              <FlatList
-                data={filteredAuthors}
-                keyExtractor={(item) => item.id.toString()}
+              <View
                 style={{
                   maxHeight: 150,
                   backgroundColor: theme.colors.background,
@@ -296,8 +296,10 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
                   zIndex: 2,
                   elevation: 3,
                 }}
-                renderItem={({ item }) => (
+              >
+                {filteredAuthors.map((item) => (
                   <TouchableOpacity
+                    key={item.id}
                     onPress={() => handleAuthorSelect(item)}
                     style={{
                       padding: 10,
@@ -309,8 +311,8 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
                       {item.name}
                     </Text>
                   </TouchableOpacity>
-                )}
-              />
+                ))}
+              </View>
             )}
           </View>
 
@@ -337,59 +339,6 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
             />
           </TouchableOpacity>
 
-          <Portal>
-            <Modal
-              visible={showStatusModal}
-              onDismiss={() => setShowStatusModal(false)}
-              contentContainerStyle={{
-                position: "absolute",
-                left: "10%",
-                right: "10%",
-                backgroundColor: theme.colors.background,
-                padding: 20,
-                borderRadius: 8,
-                elevation: 5,
-                top: "30%",
-              }}
-            >
-              <View>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    marginBottom: 15,
-                    textAlign: "center",
-                    color: theme.colors.onBackground,
-                  }}
-                >
-                  Select Status
-                </Text>
-                {STATUS_OPTIONS.map((option) => (
-                  <TouchableOpacity
-                    key={option.value}
-                    onPress={() => handleStatusSelect(option.value)}
-                    style={{
-                      padding: 15,
-                      borderBottomWidth: 1,
-                      borderBottomColor: theme.colors.outline,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color:
-                          book.status === option.value
-                            ? theme.colors.primary
-                            : theme.colors.onBackground,
-                        fontSize: 16,
-                      }}
-                    >
-                      {option.label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </Modal>
-          </Portal>
-
           <TextInput
             label="Link"
             value={book.link}
@@ -402,9 +351,11 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
             value={book.notes}
             onChangeText={(text) => setBook({ ...book, notes: text })}
             style={{ width: "100%", marginTop: 10 }}
+            multiline={true}
+            numberOfLines={4}
           />
 
-          {book.status != "to-read" && (
+          {book.status !== "to-read" && (
             <>
               <TextInput
                 label="Started Date"
@@ -474,14 +425,18 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
           )}
 
           {(book.status === "finished" || book.status === "abandoned") && (
-            <StarRating rating={rating} onChange={handleSetRating} />
+            <View style={{ marginTop: 15, marginBottom: 10 }}>
+              <StarRating rating={rating} onChange={handleSetRating} />
+            </View>
           )}
+
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
-              marginTop: 10,
+              marginTop: 20,
               width: "100%",
+              marginBottom: 10,
             }}
           >
             <Button
@@ -501,6 +456,59 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Portal>
+        <Modal
+          visible={showStatusModal}
+          onDismiss={() => setShowStatusModal(false)}
+          contentContainerStyle={{
+            position: "absolute",
+            left: "10%",
+            right: "10%",
+            backgroundColor: theme.colors.background,
+            padding: 20,
+            borderRadius: 8,
+            elevation: 5,
+            top: "30%",
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontSize: 18,
+                marginBottom: 15,
+                textAlign: "center",
+                color: theme.colors.onBackground,
+              }}
+            >
+              Select Status
+            </Text>
+            {STATUS_OPTIONS.map((option) => (
+              <TouchableOpacity
+                key={option.value}
+                onPress={() => handleStatusSelect(option.value)}
+                style={{
+                  padding: 15,
+                  borderBottomWidth: 1,
+                  borderBottomColor: theme.colors.outline,
+                }}
+              >
+                <Text
+                  style={{
+                    color:
+                      book.status === option.value
+                        ? theme.colors.primary
+                        : theme.colors.onBackground,
+                    fontSize: 16,
+                  }}
+                >
+                  {option.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
+      </Portal>
     </PageView>
   );
 }
