@@ -54,8 +54,12 @@ export default function BookList() {
 
     // Apply search filter
     if (searchQuery) {
-      result = result.filter((book) =>
-        book.title.toLowerCase().includes(searchQuery.toLowerCase())
+      result = result.filter(
+        (book) =>
+          book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (book.authorName ?? "")
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
       );
     }
 
