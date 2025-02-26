@@ -22,12 +22,20 @@ const SORT_OPTIONS = [
   { label: "Date Added (Oldest)", value: "addedRev" },
 ];
 
+const FILTER_OPTIONS = [
+  { label: "All", value: "all" },
+  { label: "Read", value: "read" },
+  { label: "Unread", value: "unread" },
+  { label: "Abandoned", value: "abandoned" },
+];
+
 export default function BookList() {
   const theme = useTheme();
   const { triggerMessage } = useMessage();
   const [books, setBooks] = useState<Book[]>([]);
   const [sort, setSort] = useState<string>();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filter, setFilter] = useState<string>();
   const [displayedBooks, setDisplayedBooks] = useState<Book[]>([]);
 
   // Load initial books
@@ -63,6 +71,21 @@ export default function BookList() {
       );
     }
 
+    // Apply filtering
+    switch (filter) {
+      case "read":
+        result = result.filter((book) => book.status === "finished");
+        break;
+      case "unread":
+        result = result.filter(
+          (book) => book.status != "finished" && book.status != "abandoned"
+        );
+        break;
+      case "abandoned":
+        result = result.filter((book) => book.status === "abandoned");
+        break;
+    }
+
     // Apply sorting
     switch (sort) {
       case "title":
@@ -94,11 +117,12 @@ export default function BookList() {
     }
 
     setDisplayedBooks(result);
-  }, [books, sort, searchQuery]);
+  }, [books, sort, filter, searchQuery]);
 
   const handleReset = () => {
     setSort("");
     setSearchQuery("");
+    setFilter("");
     setDisplayedBooks(books);
   };
 
@@ -133,21 +157,21 @@ export default function BookList() {
           flexDirection: "row",
           alignItems: "center",
           width: "100%",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
+          marginBottom: 20,
         }}
       >
         <Dropdown
-          label="Sort By"
+          label="Sort"
           value={sort}
           onSelect={(val) => {
-            console.log("Selected sort option:", val); // Debugging log
             setSort(val);
           }}
           options={SORT_OPTIONS}
           placeholder="Sort By"
           menuContentStyle={{
             backgroundColor: theme.colors.background,
-            width: 200,
+            width: 160,
           }}
           CustomDropdownItem={({ option }) => (
             <Text
@@ -161,16 +185,39 @@ export default function BookList() {
             </Text>
           )}
         />
-
-        <Button
-          mode="outlined"
-          onPress={handleReset}
-          disabled={!sort && !searchQuery}
-          style={{ width: "30%" }}
-        >
-          Reset
-        </Button>
+        <Dropdown
+          label="Filter"
+          value={filter}
+          onSelect={(val) => {
+            setFilter(val);
+          }}
+          options={FILTER_OPTIONS}
+          placeholder="Filter"
+          menuContentStyle={{
+            backgroundColor: theme.colors.background,
+            width: 140,
+          }}
+          CustomDropdownItem={({ option }) => (
+            <Text
+              onPress={() => setFilter(option.value)}
+              style={{
+                color: theme.colors.onBackground,
+                padding: 10,
+              }}
+            >
+              {option.label}
+            </Text>
+          )}
+        />
       </View>
+      <Button
+        mode="outlined"
+        onPress={handleReset}
+        disabled={!sort && !searchQuery && !filter}
+        style={{ width: "40%" }}
+      >
+        Reset
+      </Button>
       <ScrollView
         style={{
           width: "100%",
