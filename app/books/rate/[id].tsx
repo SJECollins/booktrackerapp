@@ -1,7 +1,7 @@
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { Button } from "react-native-paper";
 import { View } from "react-native";
-import BigHeadText from "@/components/bigHeadText";
+import { BigHeadText } from "@/components/textElements";
 import { getBookById, updateBook, Book } from "@/lib/db";
 import StarRating from "react-native-star-rating-widget";
 import { useCallback, useState } from "react";

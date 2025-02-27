@@ -1,6 +1,5 @@
 import PageView from "@/components/pageView";
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
+import { HeadText, RegText } from "@/components/textElements";
 import { getBookById, deleteBook } from "@/lib/db";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button } from "react-native-paper";

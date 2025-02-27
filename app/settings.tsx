@@ -7,7 +7,7 @@ import {
   Genre,
   Book,
 } from "../lib/db";
-import HeadText from "@/components/headText";
+import { HeadText } from "@/components/textElements";
 import PageView from "@/components/pageView";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";

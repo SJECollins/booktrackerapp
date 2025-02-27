@@ -2,10 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { View } from "react-native";
 import { Text, TextInput, useTheme, Button } from "react-native-paper";
 import { getBooks, Book } from "../../lib/db";
-import LinkButton from "../../components/button";
-import RegText from "@/components/regText";
-import HeadText from "@/components/headText";
-import LinkText from "@/components/linkText";
+import {
+  HeadText,
+  RegText,
+  LinkText,
+  LinkButton,
+  SmallText,
+} from "@/components/textElements";
 import { Dropdown } from "react-native-paper-dropdown";
 import PageView from "@/components/pageView";
 import { useMessage } from "../_layout";
@@ -158,7 +161,6 @@ export default function BookList() {
           alignItems: "center",
           width: "100%",
           justifyContent: "space-around",
-          marginBottom: 20,
         }}
       >
         <Dropdown
@@ -214,15 +216,16 @@ export default function BookList() {
         mode="outlined"
         onPress={handleReset}
         disabled={!sort && !searchQuery && !filter}
-        style={{ width: "40%" }}
+        style={{ width: "40%", marginVertical: 20 }}
       >
         Reset
       </Button>
+      <SmallText text={`Showing ${displayedBooks.length} books`} />
       <ScrollView
         style={{
           width: "100%",
-          padding: 20,
-          marginBottom: 20,
+          paddingHorizontal: 20,
+          paddingBottom: 20,
           flex: 1,
         }}
       >

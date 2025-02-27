@@ -3,12 +3,14 @@ import { useTheme } from "react-native-paper";
 import { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import LinkButton from "../components/button";
 import { getBooks, Book } from "../lib/db";
-import BigHeadText from "@/components/bigHeadText";
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
-import LinkText from "@/components/linkText";
+import {
+  BigHeadText,
+  HeadText,
+  RegText,
+  LinkText,
+  LinkButton,
+} from "@/components/textElements";
 import PageView from "@/components/pageView";
 import { ScrollView } from "react-native-gesture-handler";
 

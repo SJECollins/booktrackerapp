@@ -1,5 +1,4 @@
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
+import { HeadText, RegText } from "@/components/textElements";
 import { getAuthorById, updateAuthor } from "@/lib/db";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, TextInput } from "react-native-paper";

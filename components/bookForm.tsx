@@ -25,7 +25,7 @@ import { useCallback, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useMessage } from "@/app/_layout";
 import { useFocusEffect, useRouter } from "expo-router";
-import HeadText from "./headText";
+import { HeadText } from "./textElements";
 import PageView from "./pageView";
 import MultiGenreSelector from "./genreSelect";
 import StarRating from "react-native-star-rating-widget";

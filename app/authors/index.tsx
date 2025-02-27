@@ -1,6 +1,4 @@
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
-import LinkText from "@/components/linkText";
+import { HeadText, LinkText, RegText } from "@/components/textElements";
 import { getAuthors, Author } from "../../lib/db";
 import PageView from "@/components/pageView";
 import { useMessage } from "../_layout";

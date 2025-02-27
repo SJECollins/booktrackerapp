@@ -1,13 +1,15 @@
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
-import LinkText from "@/components/linkText";
+import {
+  HeadText,
+  LinkText,
+  RegText,
+  LinkButton,
+} from "@/components/textElements";
 import { getAuthorById, getBooksByAuthorId, Book, Author } from "../../lib/db";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import PageView from "@/components/pageView";
 import { View } from "react-native";
 import { useMessage } from "../_layout";
 import { useCallback, useState } from "react";
-import LinkButton from "@/components/button";
 
 // Display a author and their books
 export default function AuthorDetails() {

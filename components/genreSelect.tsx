@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, FlatList, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { Text, TextInput, Chip, useTheme } from "react-native-paper";
 
 interface Genre {

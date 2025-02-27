@@ -4,14 +4,17 @@ import { getBookById, Book, Genre, getGenresByBookId } from "../../lib/db";
 import { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
-import LinkButton from "../../components/button";
 import { useMessage } from "../_layout";
-import RegText from "@/components/regText";
-import HeadText from "@/components/headText";
+import {
+  BigHeadText,
+  HeadText,
+  RegText,
+  LinkText,
+  LinkButton,
+} from "@/components/textElements";
 import PageView from "@/components/pageView";
-import LinkText from "@/components/linkText";
 import { StarRatingDisplay } from "react-native-star-rating-widget";
-import BigHeadText from "@/components/bigHeadText";
+
 import { ScrollView } from "react-native-gesture-handler";
 
 // Display individual book details

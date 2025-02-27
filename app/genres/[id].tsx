@@ -1,13 +1,15 @@
-import HeadText from "@/components/headText";
-import RegText from "@/components/regText";
-import LinkText from "@/components/linkText";
+import {
+  HeadText,
+  LinkButton,
+  LinkText,
+  RegText,
+} from "@/components/textElements";
 import { getGenreById, getBooksByGenreId, Genre, Book } from "../../lib/db";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import PageView from "@/components/pageView";
 import { View } from "react-native";
 import { useMessage } from "../_layout";
 import { useCallback, useState } from "react";
-import LinkButton from "@/components/button";
 
 // Display a genre and its books
 export default function GenreDetails() {
