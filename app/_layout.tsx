@@ -20,7 +20,9 @@ const { Navigator } = createDrawerNavigator();
 const DrawerNavigator = withLayoutContext(Navigator);
 
 // Theme context and provider (move to own file?)
-const ThemeContext = createContext();
+const ThemeContext = createContext<
+  { darkMode: boolean; toggleTheme: () => void } | undefined
+>(undefined);
 export const useAppTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -29,7 +31,7 @@ export const useAppTheme = () => {
   return context;
 };
 
-const ThemeProvider = ({ children }) => {
+const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [darkMode, setDarkMode] = useState(
     Appearance.getColorScheme() === "dark"
   );
@@ -127,7 +129,7 @@ function RootLayout() {
           name="index"
           options={{
             title: "Home",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="home" size={size} color={color} />
             ),
           }}
@@ -136,7 +138,7 @@ function RootLayout() {
           name="books/add"
           options={{
             title: "Add Book",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="add-circle" size={size} color={color} />
             ),
           }}
@@ -145,7 +147,7 @@ function RootLayout() {
           name="books/index"
           options={{
             title: "Books",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="book" size={size} color={color} />
             ),
           }}
@@ -154,7 +156,7 @@ function RootLayout() {
           name="authors/index"
           options={{
             title: "Authors",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="person" size={size} color={color} />
             ),
           }}
@@ -163,7 +165,7 @@ function RootLayout() {
           name="genres/index"
           options={{
             title: "Genres",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="list" size={size} color={color} />
             ),
           }}
@@ -172,7 +174,7 @@ function RootLayout() {
           name="settings"
           options={{
             title: "Settings",
-            drawerIcon: ({ color, size }) => (
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
               <Ionicons name="settings" size={size} color={color} />
             ),
           }}
