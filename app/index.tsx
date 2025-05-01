@@ -61,6 +61,7 @@ export default function Index() {
   };
 
   const getFavouriteAuthor = () => {
+    // Returns the author with the most books read - should maybe be average rating?
     const authorCounts = books.reduce((counts, book) => {
       if (book.authorName) {
         counts[book.authorName] = (counts[book.authorName] || 0) + 1;

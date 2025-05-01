@@ -14,7 +14,7 @@ import * as Sharing from "expo-sharing";
 import { useMessage } from "./_layout";
 
 const convertToCSV = (data: any) => {
-  // Create separate CSV files for each table
+  // Create separate CSV files for each table - in progress
   const authorsCSV: string = [
     ["id", "name"].join(","), // Header
     ...data.authors.map((author: Author) => [author.id, author.name].join(",")),

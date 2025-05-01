@@ -109,7 +109,12 @@ export default function BookForm({ bookId }: { bookId: string | null }) {
   const handleStatusSelect = (
     status: "finished" | "abandoned" | "reading" | "to-read"
   ) => {
-    setBook({ ...book, status });
+    const updatedBook = {
+      ...book,
+      status,
+      ...(status === "finished" && { finishedDate: new Date().toISOString() }),
+    };
+    setBook(updatedBook);
     setShowStatusModal(false);
   };
 

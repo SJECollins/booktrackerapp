@@ -180,7 +180,7 @@ function RootLayout() {
           }}
         />
 
-        {/* Hacky solution to hide ones we don't want to see in drawer */}
+        {/* Hacky solution to hide ones we don't want to see in drawer - height 0 */}
         <DrawerNavigator.Screen
           name="books/[id]"
           options={{
@@ -258,7 +258,7 @@ function RootLayout() {
           options={{
             drawerItemStyle: { height: 0 },
             headerShown: true,
-            title: "Delet Author",
+            title: "Delete Author",
           }}
         />
       </DrawerNavigator>
