@@ -106,7 +106,8 @@ export default function Authors() {
       <ScrollView
         style={{
           width: "100%",
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingBottom: 20,
           flex: 1,
         }}
       >

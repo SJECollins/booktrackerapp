@@ -23,6 +23,8 @@ const SORT_OPTIONS = [
   { label: "Author Name (Z-A)", value: "authorNameRev" },
   { label: "Date Added (Newest)", value: "added" },
   { label: "Date Added (Oldest)", value: "addedRev" },
+  { label: "Date Finished (Newest)", value: "finished" },
+  { label: "Date Finished (Oldest)", value: "finishedRev" },
 ];
 
 const FILTER_OPTIONS = [
@@ -115,6 +117,20 @@ export default function BookList() {
       case "added":
         result.sort(
           (a, b) => new Date(a.added).getTime() - new Date(b.added).getTime()
+        );
+        break;
+      case "finishedRev":
+        result.sort(
+          (a, b) =>
+            new Date(b.finishedDate).getTime() -
+            new Date(a.finishedDate).getTime()
+        );
+        break;
+      case "finished":
+        result.sort(
+          (a, b) =>
+            new Date(a.finishedDate).getTime() -
+            new Date(b.finishedDate).getTime()
         );
         break;
     }

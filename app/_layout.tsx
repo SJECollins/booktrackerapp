@@ -153,6 +153,24 @@ function RootLayout() {
           }}
         />
         <DrawerNavigator.Screen
+          name="wanted/add"
+          options={{
+            title: "Add Wanted Book",
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
+              <Ionicons name="add-circle-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <DrawerNavigator.Screen
+          name="wanted/index"
+          options={{
+            title: "Wanted Books",
+            drawerIcon: ({ color, size }: { color: string; size: number }) => (
+              <Ionicons name="bookmark" size={size} color={color} />
+            ),
+          }}
+        />
+        <DrawerNavigator.Screen
           name="authors/index"
           options={{
             title: "Authors",
@@ -259,6 +277,22 @@ function RootLayout() {
             drawerItemStyle: { height: 0 },
             headerShown: true,
             title: "Delete Author",
+          }}
+        />
+        <DrawerNavigator.Screen
+          name="wanted/[id]"
+          options={{
+            drawerItemStyle: { height: 0 },
+            headerShown: true,
+            title: "Wanted Book Details",
+          }}
+        />
+        <DrawerNavigator.Screen
+          name="wanted/delete/[id]"
+          options={{
+            drawerItemStyle: { height: 0 },
+            headerShown: true,
+            title: "Delete Wanted Book",
           }}
         />
       </DrawerNavigator>

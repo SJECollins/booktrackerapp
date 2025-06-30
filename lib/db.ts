@@ -72,6 +72,13 @@ const mapDbToBook = (
   };
 };
 
+// Wanted interface
+export interface Wanted {
+  id: number;
+  title: string;
+  author_id: number | null;
+}
+
 // Open the database (openDatabase deprecated)
 const db = SQLite.openDatabaseSync("books.db");
 
@@ -108,6 +115,13 @@ export const setupDatabase = () => {
       PRIMARY KEY (book_id, genre_id),
       FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
       FOREIGN KEY (genre_id) REFERENCES genres(id) ON DELETE CASCADE
+    );
+
+    CREATE TABLE IF NOT EXISTS wanted (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      author_id INTEGER,
+      FOREIGN KEY(author_id) REFERENCES authors(id) ON DELETE SET NULL
     );
     `
   );
@@ -325,13 +339,50 @@ export const addGenreToBook = (bookId: number, genreId: number) => {
   ]);
 };
 
+// Function to add a wanted book
+export const addWantedBook = (title: string, authorId: number | null) => {
+  let result = db.runSync(
+    `INSERT INTO wanted (title, author_id) VALUES (?, ?);`,
+    [title, authorId]
+  );
+  return result.lastInsertRowId;
+};
+
+// Function to get all wanted books
+export const getWanted = (): Wanted[] => {
+  return db.getAllSync(`SELECT * FROM wanted;`).map(
+    (result: any): Wanted => ({
+      id: result.id,
+      title: result.title,
+      author_id: result.author_id,
+    })
+  );
+};
+
+// Function to get wanted book by id
+export const getWantedById = (id: number): Wanted => {
+  const result = db.getFirstSync<Wanted>(`SELECT * FROM wanted WHERE id = ?;`, [
+    id,
+  ]);
+  if (!result) {
+    throw new Error(`Wanted book with id ${id} not found`);
+  }
+  return result;
+};
+
+// Function to delete wanted book
+export const deleteWantedBook = (id: number) => {
+  db.runSync(`DELETE FROM wanted WHERE id = ?;`, [id]);
+};
+
 // Reset the database tables
 export const resetDatabaseTables = () => {
   db.execSync(
     `DROP TABLE IF EXISTS book_genres;
      DROP TABLE IF EXISTS books;
      DROP TABLE IF EXISTS authors;
-     DROP TABLE IF EXISTS genres; 
+     DROP TABLE IF EXISTS genres;
+     DROP TABLE IF EXISTS wanted;
     `
   );
   setupDatabase(); // Recreate tables
@@ -343,6 +394,7 @@ export const exportDatabase = () => {
     authors: getAuthors(),
     genres: getGenres(),
     books: getBooks(),
+    wanted: getWanted(),
   };
   const json = JSON.stringify(data, null, 2);
   return json;
