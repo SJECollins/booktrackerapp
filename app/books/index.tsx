@@ -100,33 +100,37 @@ export default function BookList() {
         result.sort((a, b) => b.title.localeCompare(a.title));
         break;
       case "authorName":
-        result.sort((a, b) =>
-          (a.authorName ?? "").localeCompare(b.authorName ?? "")
-        );
+        result.sort((a, b) => {
+          const aLastName = (a.authorName ?? "").split(" ").slice(-1)[0];
+          const bLastName = (b.authorName ?? "").split(" ").slice(-1)[0];
+          return aLastName.localeCompare(bLastName);
+        });
         break;
       case "authorNameRev":
-        result.sort((a, b) =>
-          (b.authorName ?? "").localeCompare(a.authorName ?? "")
-        );
+        result.sort((a, b) => {
+          const aLastName = (a.authorName ?? "").split(" ").slice(-1)[0];
+          const bLastName = (b.authorName ?? "").split(" ").slice(-1)[0];
+          return bLastName.localeCompare(aLastName);
+        });
         break;
-      case "addedRev":
+      case "added":
         result.sort(
           (a, b) => new Date(b.added).getTime() - new Date(a.added).getTime()
         );
         break;
-      case "added":
+      case "addedRev":
         result.sort(
           (a, b) => new Date(a.added).getTime() - new Date(b.added).getTime()
         );
         break;
-      case "finishedRev":
+      case "finished":
         result.sort(
           (a, b) =>
             new Date(b.finishedDate).getTime() -
             new Date(a.finishedDate).getTime()
         );
         break;
-      case "finished":
+      case "finishedRev":
         result.sort(
           (a, b) =>
             new Date(a.finishedDate).getTime() -

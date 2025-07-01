@@ -5,7 +5,7 @@ import {
   LinkButton,
   SmallText,
 } from "@/components/textElements";
-import { getWanted, Wanted } from "../../lib/db";
+import { getWanted, Wanted, getAuthorById } from "../../lib/db";
 import PageView from "@/components/pageView";
 import { useMessage } from "../_layout";
 import { useCallback, useEffect, useState } from "react";
@@ -133,9 +133,7 @@ export default function WantedList() {
           >
             {wanted.map((book) => (
               <LinkText key={book.id} to={`/wanted/${book.id}`}>
-                {`${book.title}${
-                  book.author_id ? ` by Author ${book.author_id}` : ""
-                }`}
+                {`${book.title}`}
               </LinkText>
             ))}
           </ScrollView>

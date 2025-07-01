@@ -44,10 +44,18 @@ export default function Authors() {
     // Apply sorting
     switch (sort) {
       case "name":
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        result.sort((a, b) => {
+          const aLastName = a.name.split(" ").slice(-1)[0];
+          const bLastName = b.name.split(" ").slice(-1)[0];
+          return aLastName.localeCompare(bLastName);
+        });
         break;
       case "nameRev":
-        result.sort((a, b) => b.name.localeCompare(a.name));
+        result.sort((a, b) => {
+          const aLastName = a.name.split(" ").slice(-1)[0];
+          const bLastName = b.name.split(" ").slice(-1)[0];
+          return bLastName.localeCompare(aLastName);
+        });
         break;
     }
 
