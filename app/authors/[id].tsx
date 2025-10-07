@@ -4,7 +4,14 @@ import {
   RegText,
   LinkButton,
 } from "@/components/textElements";
-import { getAuthorById, getBooksByAuthorId, Book, Author } from "../../lib/db";
+import {
+  getAuthorById,
+  getBooksByAuthorId,
+  Book,
+  Author,
+  Wanted,
+  getWantedByAuthorId,
+} from "../../lib/db";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import PageView from "@/components/pageView";
 import { View } from "react-native";
@@ -18,6 +25,7 @@ export default function AuthorDetails() {
   const [isLoading, setIsLoading] = useState(true);
   const [author, setAuthor] = useState<Author | null>(null);
   const [books, setBooks] = useState<Book[]>([]);
+  const [wantedBooks, setWantedBooks] = useState<Wanted[]>([]);
 
   // Load author and their books
   async function loadData() {
@@ -38,6 +46,8 @@ export default function AuthorDetails() {
         setAuthor(fetchedAuthor);
         const fetchedBooks = await getBooksByAuthorId(authorId);
         setBooks(fetchedBooks);
+        const fetchedWantedBooks = await getWantedByAuthorId(authorId);
+        setWantedBooks(fetchedWantedBooks);
       }
     } catch (err) {
       triggerMessage("Error loading author", "error");
@@ -109,6 +119,16 @@ export default function AuthorDetails() {
               </LinkText>
             ))}
         </>
+      )}
+      <HeadText text="Wanted Books:" />
+      {wantedBooks.length === 0 ? (
+        <RegText text="No wanted books found for this author." />
+      ) : (
+        wantedBooks.map((wanted) => (
+          <LinkText key={wanted.id} to={`/wanted/${wanted.id}`}>
+            {wanted.title}
+          </LinkText>
+        ))
       )}
     </PageView>
   );

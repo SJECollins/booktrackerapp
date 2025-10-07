@@ -370,6 +370,16 @@ export const getWantedById = (id: number): Wanted => {
   return result;
 };
 
+export const getWantedByAuthorId = (authorId: number): Wanted[] => {
+  return db
+    .getAllSync<Wanted>(`SELECT * FROM wanted WHERE author_id = ?;`, [authorId])
+    .map((result) => ({
+      id: result.id,
+      title: result.title,
+      author_id: result.author_id,
+    }));
+};
+
 // Function to delete wanted book
 export const deleteWantedBook = (id: number) => {
   db.runSync(`DELETE FROM wanted WHERE id = ?;`, [id]);

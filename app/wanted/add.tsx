@@ -7,7 +7,7 @@ import {
 import { HeadText } from "@/components/textElements";
 import { Button, TextInput, useTheme } from "react-native-paper";
 import { useMessage } from "../_layout";
-import { addWantedBook, Wanted, getAuthors, Author } from "@/lib/db";
+import { addWantedBook, Wanted, getAuthors, Author, addAuthor } from "@/lib/db";
 import { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import PageView from "@/components/pageView";
@@ -69,13 +69,25 @@ export default function AddWanted() {
       return;
     }
 
-    if (!author) {
-      triggerMessage("Author is required", "error");
-      return;
+    let authorId = author ? author.id : null;
+    const existingAuthor = authors.find((a) => a.name === authorInput.trim());
+
+    if (existingAuthor) {
+      authorId = existingAuthor.id;
+    } else if (authorInput.trim()) {
+      addAuthor(authorInput.trim());
+      const newAuthorID = getAuthors().find(
+        (a) => a.name === authorInput.trim()
+      )?.id;
+      if (newAuthorID) {
+        authorId = newAuthorID ?? null;
+      }
+    } else {
+      authorId = null;
     }
 
     try {
-      await addWantedBook(title, author.id);
+      await addWantedBook(title, authorId);
       triggerMessage("Wanted book added successfully", "success");
       router.push("/wanted");
     } catch (err) {
