@@ -64,7 +64,7 @@ export default function WantedDetail() {
     <PageView>
       <HeadText text={wanted.title} />
       <View style={{ padding: 20 }}>
-        <RegText text={`Author: ${author}`} />
+        <RegText text={`Author: ${author?.name}`} />
       </View>
       <RegText text="This book is on your wanted list." />
       <View style={{ padding: 20 }}>
