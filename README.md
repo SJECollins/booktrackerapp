@@ -20,6 +20,16 @@ List books which can be filtered and sorted.
 View books by author.
 List authors which can be filtered and sorted.
 
-## Wanted
+### Wanted
 
 Wishlist of wanted books.
+
+## Installing the App
+
+In the terminal:
+
+```
+eas build --platform android --profile preview --local
+```
+
+Outputs .apk to dist folder. Move to android and install.
